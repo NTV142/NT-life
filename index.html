@@ -3,37 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Board</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-    <script>
-        const correctHash = '8a8c7e7e4b5c9f1a2d3e4f5a6b7c8d9e';
-        function verifyPassword() {
-            const password = document.getElementById('password').value;
-            const hash = CryptoJS.MD5(password).toString();
-            return hash === correctHash;
+    <title>Protected Post Board</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
         }
-        function postMessage() {
-            if (!verifyPassword()) {
-                alert('Incorrect password!');
-                return;
+        input, textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #posts {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            const hashedInput = md5(passwordInput);
+            const correctHash = "a60786a3cbf7603733575d98e7c4428a"; // MD5 for "SanSanCh@NT"
+
+            if (hashedInput === correctHash) {
+                document.getElementById('postForm').style.display = 'block';
+                document.getElementById('passwordError').style.display = 'none';
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
             }
-            const message = document.getElementById('message').value;
-            const imageUrl = document.getElementById('image').value;
-            const board = document.getElementById('board');
-            const post = document.createElement('div');
-            post.innerHTML = `<p>${message}</p><img src="${imageUrl}" alt="User Image" />`;
-            board.appendChild(post);
-            document.getElementById('message').value = '';
-            document.getElementById('image').value = '';
+        }
+
+        function md5(string) {
+            // Simple MD5 hashing library or function should be implemented here
+            // Placeholder for actual md5 implementation
+            return string; // This should be the MD5 hash of the string
         }
     </script>
 </head>
 <body>
-    <h1>Message Board</h1>
-    <input type="password" id="password" placeholder="Enter Password" />
-    <textarea id="message" placeholder="Write your message here"></textarea>
-    <input type="text" id="image" placeholder="Image URL" />
-    <button onclick="postMessage()">Post</button>
-    <div id="board"></div>
+
+    <h1>Welcome to the Protected Post Board</h1>
+    <input type="password" id="password" placeholder="Enter Password" onblur="checkPassword()">
+    <div id="passwordError" style="color: red; display: none;">Incorrect Password</div>
+
+    <form id="postForm" style="display: none;">
+        <textarea placeholder="Your message" required></textarea>
+        <input type="file" accept="image/*">
+        <button type="submit">Post</button>
+    </form>
+
+    <div id="posts">
+        <!-- Posts from data folder will be displayed here -->
+    </div>
+
 </body>
 </html>
